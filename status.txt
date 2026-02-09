@@ -1,0 +1,3 @@
+The program compiles and runs correctly.
+The server sends the file immediately upon connection.
+The client receives and saves the file successfully.

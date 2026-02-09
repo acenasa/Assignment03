@@ -1,0 +1,163 @@
+Bash (short for "Bourne Again SHell") is an interactive command interpreter and scripting language developed for Unix-like operating systems. Created in 1989 by Brian Fox for the GNU Project,[7] it is designed as a completely free software alternative for the Bourne shell, sh, and other proprietary Unix shells,[8] supported by the Free Software Foundation.[7] Having gained widespread adoption, Bash is commonly used as the default login shell for numerous Linux distributions.[9] It also supports the execution of commands from files, known as shell scripts, facilitating automation.
+
+The Bash command syntax is a superset of the Bourne shell's syntax, from which all basic features of the Bash syntax were copied. As a result, Bash can execute the vast majority of Bourne shell scripts without modification. Some other ideas were borrowed from the C shell, its successor tcsh, and the Korn Shell. It is available on nearly all modern operating systems, making it a versatile tool in various computing environments. 
+
+ASCII, strings and numbers
+
+    The input language to the shell shall be first recognized at the character level. 
+
+— "POSIX 1003.1-2024, 2.10.1 Shell Grammar Lexical Conventions". The Open Group Base Specifications Issue 8, IEEE Std 1003.1-2024. The Open Group. Retrieved 25 August 2025.
+
+$ printf '<newline>:  <%b>\n' $'\n'
+<newline>:  <
+>
+$ printf '<tab>:      <%b>\n' $'\t'
+<tab>:      <	>
+$ printf '<space>:    <%s>\n' " "
+<space>:    < >
+$ printf '<NUL>:      <%b>\n' $'\0'
+<NUL>:      <>
+
+Any series of characters is called a "string", or sometimes a "string literal". In Unix-like operating systems, all characters, printable and non-printing, except for a few such as the null character and forward slash /, can be used in filenames. In addition, all strings are case-sensitive.[10]
+
+Bash, like many other programming languages, uses zero-based numbering.
+Control+key combinations
+
+The Control+key functionality is provided by GNU Readline and is available in interactive mode only. Certain keypress combinations allow a user to operate Bash to use tab completion and to search the command history.
+
+    Tab ↹ – Activate tab completion
+    ↑ – Scroll up (i.e. backward) in the command history
+    ↓ – Scroll down (i.e. forward) in the command history
+    Ctrl+r – Search the command history
+
+Some keypress combinations also allow a user to operate the terminal emulator in order to move the cursor within the terminal window and to control the emulator program. By default, these keypress combinations in Bash mirror those of Emacs.[11]
+
+Default keybindings for control codes include:
+
+    Ctrl+f – Move the cursor one character to the right
+    Ctrl+b – Move the cursor one character to the left
+    Alt+f – Move the cursor one word to the right
+    Alt+b – Move the cursor one word to the left
+    Ctrl+a – Move the cursor to the beginning of the current commandline
+    Ctrl+c – Cancels the current command and presents a new prompt
+    Ctrl+d – Closes the current Bash instance, possibly also closing the terminal-emulator
+    Ctrl+e – Move the cursor to the end of the current commandline
+    Ctrl+q – Wake the terminal; buffered keypresses are then processed
+    Ctrl+s – Put the terminal to sleep
+    Ctrl+w – Remove one word to the left of the cursor
+    Ctrl+z – Stop a foregrounded process
+
+Vi keybindings are also available and can be enabled by running set -o vi.[12][13]
+Syntax
+
+When Bash reads a full command line, the complete string is broken down into tokens. "Tokens" are identified using, and separated from each other using metacharacters.
+
+As of Bash 5.3, the 10 metacharacters are the space, tab, and newline, as well as the following characters: |&;()<>
+
+"Blanks" are composed entirely of unquoted metacharacters, "operators" each contain at least one unquoted metacharacter and "words" may not include any unquoted metacharacters.
+
+In practice, Bash breaks down full command strings into tokens or groups of tokens that do contain metacharacters and tokens or groups of tokens that do not contain any metacharacters—called "words". From there it further breaks words down into more specific, meaningful pieces like command names, variable assignment statements, etc.
+
+The two blanks are space and tab.
+Operators
+
+Control operators perform a control function. They can be either a newline or one of the following: ||, &&, &, ;, ;;, ;&, ;;&, |, |&, (, or ).
+
+Redirection operators redirect the input or output streams. They include <, >, &>, <<, and <<<.
+Words
+
+A word is a sequence of (non-meta-) characters treated as a single unit by the shell. A reserved word is a kind of a word that has a special meaning to the shell.[14] A name is a kind of a word separate from reserved words. Names consist solely of letters, underscores and numbers; which begins with either a letter or an underscore; which, however, may not begin with a number. Names also called identifiers, may be used for naming variables and functions.
+
+Sixteen of the twenty-two "reserved words", which may be characters or words are as follows:
+
+'!' '[[' '{' ']]' '}' case in esac for do done if then elif else fi ...
+
+Names may only contain the characters ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.
+
+In the following example of a full command string, metacharacters have a comma placed above them, ,, reserved words have a caret placed beneath them, ^, and other tokens have a backtick placed also beneath them, `.
+
+$ #,  ,    ,   ,,    ,       ,,  ,
+$   if echo foo; then bar=abc; fi
+$ # ^^ ```` ```  ^^^^ ```````  ^^
+
+Subshells
+
+A "subshell" is an additional instance of the shell which has been initialized by a current instance of the shell. When a "parent" shell creates a subshell, or a "child" shell, an exact copy of the parent's environment information is re-created and becomes the environment of the subshell.
+
+In Bash, in non-arithmetic contexts, one can force the use of a subshell by enclosing a full command string in single parentheses.
+
+$ echo foo
+foo
+$ ( echo foo )
+foo
+$
+
+For this simple case, the preceding two commands are equivalent, however, use of subshells can have certain unexpected side effects. There are numerous different forms of syntax which can cause the initialization of a subshell.[clarification needed]
+Expansion
+Main article: String interpolation
+Data structures
+
+Bash offers variables and arrays as data structures, and though there are numerous kinds of each of these available, the data structures are relatively simple compared to other languages like C or Java.[15] All data is stored in memory as a string.
+
+Beginning a word with a dollar character signifies that the word is the name of a variable or array. Surrounding the dollar / variable name syntax in double quotes is always advised. This practice shields the value(s) held by the parameter(s) from unwanted side effects.[clarification needed]
+
+Wrapping the variable name in curly brackets (braces) {} is recommended for readability and consistency between variables and arrays. When writing variables, curly brackets are optional and square brackets would be a syntax error. The parameter names are always on the left side of the equals sign and values are always on the right.
+Variables
+
+A variable is assigned to using the syntax name=value.
+
+To use a variable, the syntax $name is used, or ${name}, which expands to the value assigned to the variable.
+
+The latter syntax must be used for certain names to prevent unwanted side effects. For example, $10 will be parsed as ${1}0, so using ${10} means it will be parsed as intended.
+
+Positional parameters, usually passed to a bash script, are denoted by the variables numbered starting from $0. Special parameters are signified by punctuation characters.[15] For example, $@ expands to a list of the first through last positional parameters, "individually requoted, separated by spaces".[attribution needed]
+
+Environment variables are signified by all capital letters. Environment variables include UNIX variables like LESS_SIGUSR1, and Bourne shell variables such as HOME.[15] Scripting variables are signified by all lower case letters or CamelCase. This is only convention; any variable can be passed to the export command to be made into an environment variable.
+Arrays
+
+Arrays are data structures which hold multiple values.[16] Arrays have a set of square brackets placed at the end of the variable name and inside the curly braces. When writing arrays, curly braces and square brackets are required.
+
+An array is assigned using the syntax name=( one or more elements ). It is expanded using ${quux[@]} or ${quux[*]} or ${quux[1]}, depending on the use case.
+
+Each kind of parameter is distinguished by a specific naming convention.[15]
+
+Since Bash 4.0,[17] Bash also supports associative arrays.
+
+In this article, examples of variables from this section include ${foo}, PID, PWD, EUID, $$, ${quux} and ${zork} .
+Execution
+Main article: Execution (computing)
+
+"Execution" of a given program occurs when a user (or some other program) asks the operating system to act upon the instructions contained in the given program.
+
+By default, Bash reads user code one line at a time, interprets any newline or semi-colon character ; as the end of the current command, and executes commands in sequence. If an interactive command extends beyond the width of the terminal emulator, it is usually possible to keep typing and the command will wrap around. To extend a command beyond a newline onto an additional line, it is necessary that the final character of the first line be an unescaped backslash, \, which signals "line continuation". Bash always finishes parsing and executing one full commandline before moving on to and beginning with the parsing of the next commandline.
+
+$ foo=aa bar=bb quux=cc zork=dd; set -o xtrace
+$ : "${foo}"; : "${bar}"
++ : aa
++ : bb
+$ : "${quux}" \
+> : "${zork}"
++ : cc : dd
+$
+
+The first word of a command line is known as the "command position". Under UNIX coventionality, the first word of the command line is always some kind of command, and the rest of the words in the command line string are either options for the command, arguments for the options, or some kind of input upon which the command will operate. "Options" are also called "flags", "switches", or, more formally, "operators". When Bash attempts to locate a command for execution, the directories it searches are those listed in the $PATH variable and the current working directory.[18]
+
+$ # [COMMAND POSITION] [OPTION] [ARGUMENTS] 
+$ # ,--^   ,------------^   ,----^
+$ declare -p USER BASH_VERSION
+declare -x USER="liveuser"
+declare -- BASH_VERSION="5.2.37(1)-release"
+$
+
+Users and PS1
+
+A user account can be created for either a human or a programmatic user. In Unix-like operating systems, there are two kinds of users: "privileged" and "regular". A privileged user, such as root or the operating system kernel, is allowed to do anything whatsoever on the machine. Unprivileged users are limited in various ways.
+
+When an interactive shell session waits for user input, by default it prints a particular string of characters to the screen. In Bash, the value of this waiting-string is held in the shell variable $PS1. For regular users, a common default value for $PS1 is the dollar character, $.[a] For the superuser, a common default value is hashtag (#)
+
+$ sudo --login --user root
+[sudo] password for liveuser:
+# vim /home/liveuser/names.txt
+# exit
+$ grep -e bob ./names.txt
+grep: ./names.txt: Permission denied

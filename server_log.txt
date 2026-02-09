@@ -1,0 +1,5 @@
+java MyServer 25000
+Server started on port 25000
+Waiting for client...
+Client connected
+File sent. Connection closed.
